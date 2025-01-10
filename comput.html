@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computador IA - Anos 2000</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #b0c4de;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .computer-screen {
+            width: 80%;
+            height: 90%;
+            background: #e0e0e0;
+            border-radius: 15px;
+            display: none;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 3s ease-in-out;
+        }
+
+        .start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #d3d3d3;
+            color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            animation: fadeInStart 1s ease-out;
+        }
+
+        .start-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-family: 'Verdana', sans-serif;
+            color: #2f4f4f;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-screen p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #2f4f4f;
+        }
+
+        .button {
+            background-color: #4682b4;
+            border: 2px solid #b0c4de;
+            padding: 15px 40px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background-color: #5f9ea0;
+            transform: scale(1.05);
+        }
+
+        .desktop {
+            background: url('https://super.abril.com.br/wp-content/uploads/2022/12/papel-parede-windows.jpg?quality=70&strip=info&w=720&crop=1') no-repeat center center fixed;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .taskbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(47, 79, 79, 0.8);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-menu {
+            display: flex;
+            gap: 15px;
+        }
+
+        .start-menu button {
+            background-color: #4682b4;
+            color: white;
+            border: 2px solid #b0c4de;
+            padding: 8px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s, transform 0.3s;
+            font-size: 1rem;
+        }
+
+        .start-menu button:hover {
+            background-color: #5f9ea0;
+            transform: scale(1.05);
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: rgba(47, 79, 79, 0.8);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .status-bar .date-time {
+            font-size: 1.2rem;
+        }
+
+        .status-bar .battery-internet {
+            display: flex;
+            align-items: center;
+        }
+
+        .status-bar .battery,
+        .status-bar .internet {
+            width: 15px;
+            height: 15px;
+            background-color: white;
+            border-radius: 50%;
+            margin-left: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .window {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 80%;
+            max-width: 1200px;
+            height: 60%;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            display: none;
+            z-index: 2;
+            animation: fadeInWindow 1s ease-in-out;
+        }
+
+        .window header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #4682b4;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .window header button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .window header button:hover {
+            background-color: darkred;
+        }
+
+        .browser {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .browser input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: none;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .browser iframe {
+            width: 100%;
+            height: calc(100% - 60px);
+            border: none;
+        }
+
+        .gallery {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .gallery img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .audio-player {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+        }
+
+        .audio-player button {
+            background-color: #4682b4;
+            color: white;
+            border: 2px solid #b0c4de;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .audio-player button:hover {
+            background-color: #5f9ea0;
+        }
+
+        .audio-player audio {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInStart {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInWindow {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="start-screen" id="startScreen">
+        <div class="logo">
+            <span>Sim IA</span>
+        </div>
+        <h1>Bem-vindo ao Computador</h1>
+        <p>Pressione o botão abaixo para ligar</p>
+        <button class="button" onclick="startComputer()">Ligar</button>
+    </div>
+
+    <div class="desktop" id="desktop" style="display: none;">
+        <div class="status-bar">
+            <div class="date-time" id="dateTime"></div>
+            <div class="battery-internet">
+                <div class="battery" id="batteryIcon"></div>
+                <div class="internet" id="internetIcon"></div>
+            </div>
+        </div>
+
+        <div class="taskbar">
+            <div class="start-menu">
+                <button onclick="openWindow('browser')">
+                    <img class="icon" src="https://w7.pngwing.com/pngs/828/30/png-transparent-opera-mini-web-browser-browser-extension-opera-logo-internet-symbol-thumbnail.png" alt="" style="width: 25px; height: 25px;">
+                    Navegador
+                </button>
+                <button onclick="openWindow('files')">
+                    <img class="icon" src="https://img.icons8.com/ios/452/settings.png" alt="Configurações" style="width: 25px; height: 25px;">
+                    Configurações
+                </button>
+                <button onclick="openWindow('gallery')">
+                    <img class="icon" src="https://images.sftcdn.net/images/t_app-icon-m/p/ac91123c-5e59-4bb2-a2d0-8069b0cedb51/2567747998/gallery-go-by-google-photos-logo" alt="" style="width: 25px; height: 25px;">
+                    Galeria
+                </button>
+                <button onclick="openWindow('audio')">
+                    <img class="icon" src="https://img.icons8.com/ios/452/speaker.png" alt="Som" style="width: 25px; height: 25px;">
+                    Som
+                </button>
+            </div>
+        </div>
+
+        <div class="window" id="browserWindow">
+            <header>
+                <span>Navegador</span>
+                <button onclick="closeWindow('browser')">Fechar</button>
+            </header>
+            <div class="browser">
+                <input type="text" id="searchBar" placeholder="Digite uma pergunta..." oninput="search()">
+                <div id="aiResponse" class="ai-response">
+                    <p>Digite algo para perguntar à IA.</p>
+                </div>
+                <button class="send-button" onclick="sendQuestion()">Enviar</button>
+            </div>
+        </div>
+
+        <div class="window" id="filesWindow">
+            <header>
+                <span>Configurações</span>
+                <button onclick="closeWindow('files')">Fechar</button>
+            </header>
+            <div>
+                <p>Ajustes de Som</p>
+                <p>Notificações</p>
+            </div>
+        </div>
+
+        <div class="window" id="galleryWindow">
+            <header>
+                <span>Galeria</span>
+                <button onclick="closeWindow('gallery')">Fechar</button>
+            </header>
+            <div class="gallery">
+                <img src="https://s2-techtudo.glbimg.com/Yp79ApSd-Go_xurPUN6yWR08A6g=/0x0:300x194/984x0/smart/filters:strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2021/2/s/Mbu6R8TOqTUFoMFAVTPw/2011-03-29-win7.png" alt="Imagem 1">
+                <img src="https://plus.unsplash.com/premium_photo-1673603988651-99f79e4ae7d3?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGxhbm8lMjBkZSUyMGZ1bmRvJTIwZG8lMjBjb21wdXRhZG9yfGVufDB8fDB8fHww" alt="Imagem 2">
+                <img src="https://images.unsplash.com/photo-1507608869274-d3177c8bb4c7?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGxhbm8lMjBkZSUyMGZ1bmRvJTIwZG8lMjBjb21wdXRhZG9yfGVufDB8fDB8fHww" alt="Imagem 3">
+                <img src="https://png.pngtree.com/thumb_back/fh260/background/20230818/pngtree-sunrise-mountain-scenery-wallpaper-desktop-for-pc-and-mobile-image_13040555.jpg" alt="Imagem 4">
+            </div>
+        </div>
+
+        <div class="window" id="audioWindow">
+            <header>
+                <span>Som</span>
+                <button onclick="closeWindow('audio')">Fechar</button>
+            </header>
+            <div class="audio-player">
+                <audio controls>
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+                    Seu navegador não suporta o elemento de áudio.
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startComputer() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('desktop').style.display = 'block';
+        }
+
+        function openWindow(windowId) {
+            document.getElementById(windowId + 'Window').style.display = 'block';
+        }
+
+        function closeWindow(windowId) {
+            document.getElementById(windowId + 'Window').style.display = 'none';
+        }
+
+        function search() {
+            const query = document.getElementById('searchBar').value;
+            const responseElement = document.getElementById('aiResponse');
+            if (query.length > 0) {
+                responseElement.innerHTML = `<p>Resultado da pesquisa: ${query}</p>`;
+            } else {
+                responseElement.innerHTML = `<p>Digite algo para perguntar à IA.</p>`;
+            }
+        }
+
+        function sendQuestion() {
+            alert("Sua pergunta foi enviada à IA!");
+        }
+
+        // Exibindo a data e hora
+        function updateDateTime() {
+            const now = new Date();
+            const dateString = now.toLocaleString('pt-BR');
+            document.getElementById('dateTime').textContent = dateString;
+        }
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+
+        // Exibindo o ícone de bateria
+        function updateBatteryStatus() {
+            navigator.getBattery().then(function(battery) {
+                const batteryIcon = document.getElementById('batteryIcon');
+                if (battery.level < 0.2) {
+                    batteryIcon.style.backgroundColor = 'red';
+                } else {
+                    batteryIcon.style.backgroundColor = 'green';
+                }
+            });
+        }
+        updateBatteryStatus();
+
+        // Status de internet (simulado)
+        function updateInternetStatus() {
+            const internetIcon = document.getElementById('internetIcon');
+            internetIcon.style.backgroundColor = 'green';  // Status de conexão ok
+        }
+        updateInternetStatus();
+    </script>
+</body>
+</html>
